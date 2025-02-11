@@ -126,7 +126,6 @@ const pokemons: Pokemon[] = [
   },
 ];
 
-
 function App() {
   const [search, setSearch] = useState<string>("");
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
@@ -135,9 +134,8 @@ function App() {
   useEffect(() => {
     if (pokemonSelected) {
       console.log(pokemonSelected);
-    }},
-    [pokemonSelected]);
-
+    }
+  }, [pokemonSelected]);
 
   useEffect(() => {
     if (search === "") {
@@ -150,14 +148,34 @@ function App() {
     }
   }, [search]);
 
+
   return (
     <>
-      <div className=" flex flex-col items-center ">
-        <SearchBar setSearch={setSearch} />
-        <ListPokemons pokemons={filteredPokemons} onSelect={setPokemonSelected}  pokemonSelected={pokemonSelected}/>
+      <div className="flex flex-col md:flex-row h-screen gap-4  rounded-lg p-4 max-w-screen-lg mx-auto ">
+        {/* Contenedor de 2/3 en pantallas grandes */}
+        <div className="md:w-2/3 border-2 border-gray-300 p-4 rounded-lg h-full">
+          <p>Contenido adicional...</p>
+        </div>
+  
+        {/* Contenedor de 1/3 en pantallas grandes */}
+        <div className="md:w-1/3 flex flex-col  gap-4 h-full">
+          <SearchBar setSearch={setSearch} />
+          <div className="flex-1 custom-scrollbar overflow-y-auto mb-4 md:mb-0">
+          <ListPokemons
+              pokemons={filteredPokemons}
+              onSelect={setPokemonSelected}
+              pokemonSelected={pokemonSelected}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
+  
+
+  
+  
+  
 }
 
 export default App;

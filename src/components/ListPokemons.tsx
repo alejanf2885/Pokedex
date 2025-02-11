@@ -9,7 +9,7 @@ interface PokemonsProps {
 
 function ListPokemons({ pokemons, onSelect, pokemonSelected }: PokemonsProps) { 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3  justify-center ">
+        <div className="grid grid-cols-1   justify-center ">
             {pokemons.map((pokemon) => (
                 <CardPokemon key={pokemon.id} pokemon={pokemon} onSelect={onSelect} isSelected={pokemonSelected?.id === pokemon.id} />
             ))}
