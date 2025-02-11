@@ -2,6 +2,7 @@ import ListPokemons from "./components/ListPokemons";
 import SearchBar from "./components/SearchBar";
 import { Pokemon } from "./interfaces/Pokemon.interface";
 import PokemonCardImage from "./components/PokemonCardImage";
+import { getTypeColor } from "./utils/pokemonUtils";
 
 import { useEffect, useState } from "react";
 
@@ -170,9 +171,18 @@ function App() {
                 {/* Estadísticas */}
                 <div className="text-center">
                   <h3 className="text-xl font-bold">{pokemonSelected.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    Type: {pokemonSelected.types.join(", ")}
-                  </p>
+                  <p
+  className="text-sm text-white p-2 rounded"
+  style={{
+    background: pokemonSelected.types.length > 1
+      ? `linear-gradient(to right, ${getTypeColor(pokemonSelected.types[0])}, ${getTypeColor(pokemonSelected.types[1])})`
+      : getTypeColor(pokemonSelected.types[0]),
+  }}
+>
+  Type: {pokemonSelected.types.join(", ")}
+</p>
+
+
                   <div className="grid grid-cols-2 gap-2 text-sm mt-2">
                     <p>
                       <strong>HP:</strong> {pokemonSelected.stats.hp}
