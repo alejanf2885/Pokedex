@@ -130,6 +130,14 @@ const pokemons: Pokemon[] = [
 function App() {
   const [search, setSearch] = useState<string>("");
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
+  const [pokemonSelected, setPokemonSelected] = useState<Pokemon | null>(null);
+
+  useEffect(() => {
+    if (pokemonSelected) {
+      console.log(pokemonSelected);
+    }},
+    [pokemonSelected]);
+
 
   useEffect(() => {
     if (search === "") {
@@ -146,7 +154,7 @@ function App() {
     <>
       <div className=" flex flex-col items-center ">
         <SearchBar setSearch={setSearch} />
-        <ListPokemons pokemons={filteredPokemons} />
+        <ListPokemons pokemons={filteredPokemons} onSelect={setPokemonSelected}  pokemonSelected={pokemonSelected}/>
       </div>
     </>
   );
