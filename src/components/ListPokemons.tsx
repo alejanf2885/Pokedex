@@ -7,7 +7,7 @@ interface PokemonsProps {
 
 function ListPokemons({ pokemons }: PokemonsProps) { 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-center ">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3  justify-center ">
             {pokemons.map((pokemon) => (
                 <CardPokemon key={pokemon.id} pokemon={pokemon} />
             ))}
