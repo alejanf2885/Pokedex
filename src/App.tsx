@@ -1,6 +1,8 @@
 import ListPokemons from "./components/ListPokemons";
 import SearchBar from "./components/SearchBar";
 import { Pokemon } from "./interfaces/Pokemon.interface";
+import PokemonCardImage from "./components/PokemonCardImage";
+
 import { useEffect, useState } from "react";
 
 const pokemons: Pokemon[] = [
@@ -148,20 +150,66 @@ function App() {
     }
   }, [search]);
 
-
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen gap-4  rounded-lg p-4 max-w-screen-lg mx-auto ">
         {/* Contenedor de 2/3 en pantallas grandes */}
         <div className="md:w-2/3 border-2 border-gray-300 p-4 rounded-lg h-full">
-          <p>Contenido adicional...</p>
+          <div className="flex h-96 w-full flex-col items-center justify-between p-4 border rounded-lg bg-white shadow-md">
+            {pokemonSelected && (
+              <>
+                {/* Imagen del Pokémon */}
+                <div className="w-32 h-32">
+                  <PokemonCardImage
+                    id={pokemonSelected.id}
+                    name={pokemonSelected.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Estadísticas */}
+                <div className="text-center">
+                  <h3 className="text-xl font-bold">{pokemonSelected.name}</h3>
+                  <p className="text-sm text-gray-500">
+                    Type: {pokemonSelected.types.join(", ")}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 text-sm mt-2">
+                    <p>
+                      <strong>HP:</strong> {pokemonSelected.stats.hp}
+                    </p>
+                    <p>
+                      <strong>Attack:</strong> {pokemonSelected.stats.attack}
+                    </p>
+                    <p>
+                      <strong>Defense:</strong> {pokemonSelected.stats.defense}
+                    </p>
+                    <p>
+                      <strong>Speed:</strong> {pokemonSelected.stats.speed}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Evoluciones */}
+                <div className="flex gap-2">
+                  {pokemonSelected.evolutionChain.map((evoId) => (
+                    <PokemonCardImage
+                      key={evoId}
+                      id={evoId}
+                      name=""
+                      className="w-16 h-16"
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-  
+
         {/* Contenedor de 1/3 en pantallas grandes */}
         <div className="md:w-1/3 flex flex-col  gap-4 h-full">
           <SearchBar setSearch={setSearch} />
           <div className="flex-1 custom-scrollbar overflow-y-auto mb-4 md:mb-0">
-          <ListPokemons
+            <ListPokemons
               pokemons={filteredPokemons}
               onSelect={setPokemonSelected}
               pokemonSelected={pokemonSelected}
@@ -171,11 +219,6 @@ function App() {
       </div>
     </>
   );
-  
-
-  
-  
-  
 }
 
 export default App;
