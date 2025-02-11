@@ -4,7 +4,7 @@ import { Pokemon } from "./interfaces/Pokemon.interface";
 import PokemonCardImage from "./components/PokemonCardImage";
 import { getTypeColor } from "./utils/pokemonUtils";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
-import pokebol from './assets/pngegg.png';
+import pokebol from "./assets/pngegg.png";
 
 import { useEffect, useState, useRef } from "react";
 
@@ -139,11 +139,12 @@ function App() {
   );
 
   const statsRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   const handleSelectPokemon = (pokemon: Pokemon) => {
     setPokemonSelected(pokemon);
-    if (statsRef.current) {
-      statsRef.current.scrollIntoView({ behavior: "smooth" });
+    if (titleRef.current) {
+      titleRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -169,16 +170,25 @@ function App() {
       <div className="flex flex-col md:flex-row h-screen gap-4 rounded-lg p-4 max-w-screen-lg mx-auto font-mono">
         {/* Contenedor de 2/3 en pantallas grandes */}
         <div className="md:w-2/3 p-4 rounded-lg h-full flex flex-col justify-center items-center">
-          <div className="flex justify-center items-center gap-2">
-            <img src={pokebol} className="w-24 mx-6 object-contain" alt="Pokebola" />
-            <h1 className="text-7xl text-gray-800 mb-4">Pokedex</h1>
+          <div className="flex justify-center items-center gap-2 mx-3">
+            <img
+              src={pokebol}
+              className="w-10 sm:w-12 md:w-16 lg:w-24 mx-6"
+              alt="Pokebola"
+            />
+            <h1 ref={titleRef} className="text-7xl text-gray-800 mb-4">
+              Pokedex
+            </h1>
           </div>
 
           <div className="w-full bg">
             <SearchBar setSearch={setSearch} />
           </div>
 
-          <div ref={statsRef} className="flex h-96 w-full flex-col items-center justify-between p-4 border rounded-lg shadow-md">
+          <div
+            ref={statsRef}
+            className="flex h-96 w-full flex-col items-center justify-between p-4 border rounded-lg shadow-md"
+          >
             {pokemonSelected && (
               <>
                 {/* Imagen del Pokémon */}
