@@ -3,8 +3,10 @@ import SearchBar from "./components/SearchBar";
 import { Pokemon } from "./interfaces/Pokemon.interface";
 import PokemonCardImage from "./components/PokemonCardImage";
 import { getTypeColor } from "./utils/pokemonUtils";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import pokebol from './assets/pngegg.png';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const pokemons: Pokemon[] = [
   {
@@ -132,7 +134,18 @@ const pokemons: Pokemon[] = [
 function App() {
   const [search, setSearch] = useState<string>("");
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
-  const [pokemonSelected, setPokemonSelected] = useState<Pokemon | null>(null);
+  const [pokemonSelected, setPokemonSelected] = useState<Pokemon | null>(
+    pokemons[0]
+  );
+
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectPokemon = (pokemon: Pokemon) => {
+    setPokemonSelected(pokemon);
+    if (statsRef.current) {
+      statsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     if (pokemonSelected) {
@@ -153,14 +166,23 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row h-screen gap-4  rounded-lg p-4 max-w-screen-lg mx-auto ">
+      <div className="flex flex-col md:flex-row h-screen gap-4 rounded-lg p-4 max-w-screen-lg mx-auto font-mono">
         {/* Contenedor de 2/3 en pantallas grandes */}
-        <div className="md:w-2/3 border-2 border-gray-300 p-4 rounded-lg h-full">
-          <div className="flex h-96 w-full flex-col items-center justify-between p-4 border rounded-lg bg-white shadow-md">
+        <div className="md:w-2/3 p-4 rounded-lg h-full flex flex-col justify-center items-center">
+          <div className="flex justify-center items-center gap-2">
+            <img src={pokebol} className="w-24 mx-6 object-contain" alt="Pokebola" />
+            <h1 className="text-7xl text-gray-800 mb-4">Pokedex</h1>
+          </div>
+
+          <div className="w-full bg">
+            <SearchBar setSearch={setSearch} />
+          </div>
+
+          <div ref={statsRef} className="flex h-96 w-full flex-col items-center justify-between p-4 border rounded-lg shadow-md">
             {pokemonSelected && (
               <>
                 {/* Imagen del Pokémon */}
-                <div className="w-32 h-32">
+                <div className="w-full h-36">
                   <PokemonCardImage
                     id={pokemonSelected.id}
                     name={pokemonSelected.name}
@@ -171,17 +193,17 @@ function App() {
                 {/* Estadísticas */}
                 <div className="text-center">
                   <h3 className="text-xl font-bold">{pokemonSelected.name}</h3>
-                  <p
-  className="text-sm text-white p-2 rounded"
-  style={{
-    background: pokemonSelected.types.length > 1
-      ? `linear-gradient(to right, ${getTypeColor(pokemonSelected.types[0])}, ${getTypeColor(pokemonSelected.types[1])})`
-      : getTypeColor(pokemonSelected.types[0]),
-  }}
->
-  Type: {pokemonSelected.types.join(", ")}
-</p>
-
+                  <div className="flex gap-2 justify-center">
+                    {pokemonSelected.types.map((type) => (
+                      <p
+                        key={type}
+                        className="text-sm text-white px-6 rounded-lg"
+                        style={{ background: getTypeColor(type) }}
+                      >
+                        {type}
+                      </p>
+                    ))}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-2 text-sm mt-2">
                     <p>
@@ -206,22 +228,32 @@ function App() {
                       key={evoId}
                       id={evoId}
                       name=""
-                      className="w-16 h-16"
+                      className="w-full h-full"
                     />
                   ))}
                 </div>
               </>
             )}
           </div>
+          <div className="flex justify-center gap-4 mt-4">
+            <button className="bg-gray-300 p-2 rounded-full cursor-pointer">
+              <ChevronLeft />
+            </button>
+            <button className="p-2 rounded-full cursor-pointer">
+              <Heart />
+            </button>
+            <button className="bg-gray-300 p-2 rounded-full cursor-pointer">
+              <ChevronRight />
+            </button>
+          </div>
         </div>
 
         {/* Contenedor de 1/3 en pantallas grandes */}
-        <div className="md:w-1/3 flex flex-col  gap-4 h-full">
-          <SearchBar setSearch={setSearch} />
+        <div className="md:w-1/3 flex flex-col gap-4 h-full">
           <div className="flex-1 custom-scrollbar overflow-y-auto mb-4 md:mb-0">
             <ListPokemons
               pokemons={filteredPokemons}
-              onSelect={setPokemonSelected}
+              onSelect={handleSelectPokemon}
               pokemonSelected={pokemonSelected}
             />
           </div>
